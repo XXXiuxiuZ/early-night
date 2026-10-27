@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Early Night</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Early Night">
+<meta name="theme-color" content="#161834">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEEFF6; --surface:#FFFFFF; --ink:#22244A; --muted:#6B6E92; --line:#D5D7E6; --soft:#E3E5F1;
+  --citrine:#D99B1F; --aquamarine:#2FA79B; --amethyst:#8763D6; --sapphire:#3563D8; --rose:#D96690; --emerald:#2E9E5B; --topaz:#E0782E; --garnet:#C4413F;
+  --accent:#3563D8;
+  color-scheme: light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#161834; --surface:#20234A; --ink:#ECEBFA; --muted:#9C9EC8; --line:#353A6E; --soft:#2A2E5C;
+    --citrine:#F2BE4A; --aquamarine:#4FD3C4; --amethyst:#AA8BF2; --sapphire:#6B93F5; --rose:#F08BB0; --emerald:#5CD08A; --topaz:#F59A55; --garnet:#F0706B;
+    --accent:#8FB0FF; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#161834; --surface:#20234A; --ink:#ECEBFA; --muted:#9C9EC8; --line:#353A6E; --soft:#2A2E5C;
+  --citrine:#F2BE4A; --aquamarine:#4FD3C4; --amethyst:#AA8BF2; --sapphire:#6B93F5; --rose:#F08BB0; --emerald:#5CD08A; --topaz:#F59A55; --garnet:#F0706B;
+  --accent:#8FB0FF; color-scheme: dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:"Lexend",system-ui,-apple-system,"Segoe UI",sans-serif;font-weight:300;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:8px}
+.app{max-width:440px;margin:0 auto;padding:28px 22px 110px}
+.view[hidden]{display:none}
+
+/* Tonight */
+.when{font-size:15px;color:var(--muted);margin:0 0 6px}
+.big{font-size:44px;line-height:1.05;font-weight:500;letter-spacing:-0.02em;margin:0}
+.sub{font-size:16px;color:var(--muted);margin:10px 0 0;line-height:1.45}
+.string{display:flex;justify-content:space-between;align-items:flex-end;margin:34px 0 8px;padding:0 4px;position:relative}
+.string::before{content:"";position:absolute;left:18px;right:18px;top:50%;border-top:1.5px solid var(--line)}
+.string .g{position:relative;width:52px;height:52px;display:grid;place-items:center;background:var(--bg);border-radius:50%}
+.string .g svg{width:42px;height:42px;transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.string .g.got svg{transform:scale(1.08)}
+.streakline{display:flex;gap:18px;margin:18px 0 26px;font-size:14px;color:var(--muted)}
+.streakline b{color:var(--ink);font-weight:500;font-size:20px;display:block}
+
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.step{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px 16px;transition:background .2s,border-color .2s}
+.step svg{width:30px;height:30px;flex:none}
+.step .t{flex:1;min-width:0}
+.step .l{display:block;font-size:17px;font-weight:400}
+.step .h{display:block;font-size:13.5px;color:var(--muted);margin-top:2px;line-height:1.35}
+.step .tm{font-size:13px;color:var(--muted);flex:none}
+.step.done{background:transparent;border-color:transparent}
+.step.done .l{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--line)}
+.step.next{border-color:var(--accent);border-width:1.5px}
+.banner{margin:0 0 18px;padding:14px 16px;border-radius:16px;background:var(--soft);font-size:15px;line-height:1.45}
+
+/* Collection */
+h2{font-size:28px;font-weight:500;letter-spacing:-0.01em;margin:0 0 6px}
+.lede{color:var(--muted);font-size:15px;margin:0 0 22px;line-height:1.45}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:26px}
+.stat{background:var(--surface);border-radius:16px;padding:14px;border:1px solid var(--line)}
+.stat b{display:block;font-size:22px;font-weight:500;white-space:nowrap}
+.stat span{font-size:13px;color:var(--muted)}
+.purse{display:flex;justify-content:space-between;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 14px;margin-bottom:28px}
+.purse div{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:15px;font-weight:500}
+.purse svg{width:30px;height:30px}
+.dow,.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.dow{font-size:12px;color:var(--muted);text-align:center;margin-bottom:6px}
+.cell{aspect-ratio:1;border-radius:12px;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;position:relative}
+.cell.future{background:transparent;border-style:dashed;opacity:.5}
+.cell.ontime{border:2px solid var(--accent)}
+.cell .d{position:absolute;top:3px;left:6px;font-size:10px;color:var(--muted)}
+.cell .dots{display:flex;flex-wrap:wrap;gap:2px;width:26px;justify-content:center;margin-top:8px}
+.cell .dots i{width:7px;height:7px;transform:rotate(45deg);border-radius:1.5px}
+.cell.today{box-shadow:0 0 0 2px var(--bg),0 0 0 3.5px var(--muted)}
+.legend{font-size:13px;color:var(--muted);margin-top:12px;display:flex;align-items:center;gap:8px}
+.legend i{width:14px;height:14px;border-radius:4px;border:2px solid var(--accent);display:inline-block}
+
+/* Badges */
+.badges{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.badge{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:18px 14px;text-align:center}
+.badge svg{width:56px;height:56px}
+.badge b{display:block;font-weight:500;font-size:15px;margin-top:8px}
+.badge span{display:block;font-size:13px;color:var(--muted);margin-top:4px;line-height:1.35}
+.badge.locked svg{opacity:.28;filter:grayscale(1)}
+.badge.locked b{color:var(--muted)}
+
+/* Settings */
+.field{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.field label{font-size:16px}
+.field small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+.field input[type=time],.field select{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 10px;font-size:16px;min-width:110px}
+.stepedit{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start;padding:12px 0;border-bottom:1px solid var(--line)}
+.gempick{width:46px;height:46px;border-radius:14px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;padding:0}
+.gempick svg{width:28px;height:28px}
+.fields{display:flex;flex-direction:column;gap:6px;min-width:0}
+.fields input{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:9px 12px;font-size:16px}
+.fields input.desc{color:var(--muted)}
+.tools{display:flex;flex-direction:column;gap:2px}
+.tools button{width:34px;height:30px;border:0;background:none;color:var(--muted);border-radius:8px;display:grid;place-items:center;padding:0}
+.tools button svg{width:18px;height:18px}
+.tools button:disabled{opacity:.25;cursor:default}
+.tools button[data-act="del"]:not(:disabled){color:var(--rose)}
+.btn:disabled{opacity:.4;cursor:default}
+h3{font-size:18px;font-weight:500;margin:30px 0 4px}
+.note{color:var(--muted);font-size:14.5px;line-height:1.5;margin:6px 0}
+.note ol{padding-left:20px;margin:8px 0}
+.note li{margin:4px 0}
+.btn{display:inline-block;border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:12px 16px;font-size:15px;font-weight:400;margin:8px 8px 0 0}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:500}
+.btn.danger{color:var(--rose)}
+
+/* Nav */
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--bg);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:5}
+nav .in{max-width:440px;margin:0 auto;display:flex}
+nav button{flex:1;background:none;border:0;padding:12px 0 10px;font-size:12px;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:4px}
+nav button svg{width:22px;height:22px}
+nav button[aria-current="page"]{color:var(--ink);font-weight:500}
+
+/* Toast + overlay */
+.toast button{background:none;border:0;color:var(--bg);font-weight:500;text-decoration:underline;margin-left:10px;padding:0}
+.toast.act{pointer-events:auto}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:11px 18px;border-radius:999px;font-size:15px;font-weight:400;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;z-index:20;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.overlay{position:fixed;inset:0;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:grid;place-items:center;z-index:15;padding:24px}
+.overlay[hidden]{display:none}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:26px;padding:30px 24px;text-align:center;max-width:340px;width:100%}
+.card .gems{display:flex;justify-content:center;gap:6px;margin-bottom:18px}
+.card .gems svg{width:36px;height:36px}
+.card .medal svg{width:84px;height:84px}
+.card h4{font-size:24px;font-weight:500;margin:0 0 8px}
+.card p{color:var(--muted);margin:0 0 18px;line-height:1.45}
+canvas#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:30}
+@media (prefers-reduced-motion: reduce){.string .g svg,.toast{transition:none}}
+</style>
+</head>
+<body>
+<canvas id="fx"></canvas>
+<main class="app">
+  <section class="view" id="v-tonight" aria-label="Tonight">
+    <div id="banner"></div>
+    <p class="when" id="when"></p>
+    <h1 class="big" id="headline"></h1>
+    <p class="sub" id="subline"></p>
+    <div class="string" id="string" aria-label="Tonight’s gems"></div>
+    <div class="streakline">
+      <div><b id="s-streak">0</b>night streak</div>
+      <div><b id="s-best">0</b>best streak</div>
+      <div><b id="s-gems">0</b>gems collected</div>
+    </div>
+    <ul class="steps" id="steps"></ul>
+  </section>
+
+  <section class="view" id="v-collection" hidden aria-label="Collection">
+    <h2>Your collection</h2>
+    <p class="lede">Every step you finish becomes a gem. Nights with lights out on time get a ring.</p>
+    <div class="stats">
+      <div class="stat"><b id="c-ontime">0</b><span>on-time nights</span></div>
+      <div class="stat"><b id="c-full">0</b><span>full sets</span></div>
+      <div class="stat"><b id="c-avg">–</b><span>avg lights out</span></div>
+    </div>
+    <div class="purse" id="purse"></div>
+    <div class="dow"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+    <div class="cal" id="cal"></div>
+    <p class="legend"><i></i> Lights out on time</p>
+  </section>
+
+  <section class="view" id="v-badges" hidden aria-label="Badges">
+    <h2>Badges</h2>
+    <p class="lede" id="b-lede"></p>
+    <div class="badges" id="badges"></div>
+  </section>
+
+  <section class="view" id="v-settings" hidden aria-label="Settings">
+    <h2>Settings</h2>
+    <div class="field"><div><label for="bedtime">Lights out by</label><small>Your early-night goal</small></div><input type="time" id="bedtime"></div>
+    <div class="field"><div><label for="lead">Start winding down</label><small>Reminder before bedtime</small></div>
+      <select id="lead"><option value="15">15 min before</option><option value="30">30 min before</option><option value="45">45 min before</option><option value="60">1 hour before</option><option value="90">1½ hours before</option><option value="120">2 hours before</option></select></div>
+    <h3>Your steps</h3>
+    <p class="note">Make them fit your evening. Tap a gem to change its colour. The last step decides whether the night counts as early, so new steps are added just before it.</p>
+    <div id="stepedits"></div>
+    <button class="btn" id="addstep">Add a step</button>
+
+    <h3>Reminders on iPhone</h3>
+    <p class="note" id="r-intro"></p>
+    <div id="r-actions"></div>
+    <p class="note"><b>Open the app automatically with Shortcuts:</b></p>
+    <div class="note"><ol>
+      <li>Open the Shortcuts app, tap Automation, then New Automation.</li>
+      <li>Choose Time of Day and pick <span class="wd-time">your wind-down time</span>, repeating daily.</li>
+      <li>Select Run Immediately so it doesn’t ask each time.</li>
+      <li>Add the action Open URL with this app’s link (or Open App if it’s on your Home Screen).</li>
+    </ol></div>
+    <p class="note">Tip: pair it with iPhone’s own Sleep Focus (Settings › Focus › Sleep) so notifications quiet down once you’re in bed.</p>
+
+    <h3>Data</h3>
+    <p class="note" id="d-note">Progress is saved on this device.</p>
+    <button class="btn danger" id="reset">Reset all progress</button>
+  </section>
+</main>
+
+<nav><div class="in" id="nav">
+  <button data-v="tonight" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg>Tonight</button>
+  <button data-v="collection"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M7 4h10l4 5-9 11L3 9z"/><path d="M3 9h18M9 9l3 11 3-11M7 4l2 5 3-5 3 5 2-5"/></svg>Collection</button>
+  <button data-v="badges"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M8.5 14 7 21l5-2.5 5 2.5-1.5-7"/></svg>Badges</button>
+  <button data-v="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>Settings</button>
+</div></nav>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="overlay" id="overlay" hidden><div class="card" id="card"></div></div>
+
+<script>
+(function(){
+"use strict";
+const IN_CLAUDE = typeof window.claude !== "undefined";
+const KEY = "early-night-v1";
+const GRACE_MIN = 10;
+const GEMS = {citrine:"Citrine",amethyst:"Amethyst",aquamarine:"Aquamarine",sapphire:"Sapphire",rose:"Rose quartz",emerald:"Emerald",topaz:"Topaz",garnet:"Garnet"};
+const GEM_ORDER = ["citrine","amethyst","aquamarine","sapphire","rose","emerald","topaz","garnet"];
+const MAX_STEPS = 8;
+const DEFAULT_STEPS = [
+  {id:"prep",  label:"Get tomorrow ready", hint:"Clothes out, bag packed, a glance at tomorrow’s plan", gem:"citrine"},
+  {id:"phone", label:"Phone on the charger", hint:"Out of reach, alarm already set", gem:"amethyst"},
+  {id:"wash",  label:"Brush & wash up", hint:"Teeth, face, the little rituals", gem:"aquamarine"},
+  {id:"bed",   label:"Into bed", hint:"A few pages of a book is fine", gem:"sapphire"},
+  {id:"lights",label:"Lights out", hint:"Eyes closed. That’s the last gem.", gem:"rose"}
+];
+const CHEERS = ["Nice. One gem closer.","That’s the way.","Small step, done.","Look at you go.","Easy does it.","Shiny."];
+
+let state = fresh();
+function fresh(){return {v:1,settings:{bedtime:"23:00",lead:45,steps:DEFAULT_STEPS.map(s=>({...s}))},nights:{},badges:{},notified:{},updatedAt:0};}
+
+/* ---------- storage: localStorage now, synced db when available ---------- */
+function loadLocal(){try{const r=localStorage.getItem(KEY);if(r){const s=JSON.parse(r);if(s&&s.v===1)return s;}}catch(e){}return null;}
+function saveLocal(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+let dbRef=null, dbTimer=null;
+function save(){
+  state.updatedAt=Date.now(); saveLocal();
+  if(dbRef){clearTimeout(dbTimer);dbTimer=setTimeout(()=>{dbRef.set(JSON.parse(JSON.stringify(state))).catch(()=>{});},600);}
+}
+async function connectDb(){
+  if(!IN_CLAUDE||!window.claude.use)return;
+  try{
+    const [db,user]=await Promise.all([window.claude.use("db"),window.claude.use("user")]);
+    if(!db||!user)return;
+    const id=await user.id(); if(!id)return;
+    const ref=db.collection("data/users/"+id).doc("early-night");
+    const snap=await ref.get();
+    if(snap.exists){const remote=snap.data();if(remote&&remote.v===1&&(remote.updatedAt||0)>(state.updatedAt||0)){state=remote;saveLocal();renderAll();}}
+    dbRef=ref;
+    if(!snap.exists||(snap.data().updatedAt||0)<state.updatedAt) ref.set(JSON.parse(JSON.stringify(state))).catch(()=>{});
+    document.getElementById("d-note").textContent="Progress is saved to your Claude account, so it follows you across devices.";
+  }catch(e){}
+}
+
+/* ---------- time helpers ---------- */
+const pad=n=>String(n).padStart(2,"0");
+const ymd=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+function parseKey(k){const [y,m,d]=k.split("-").map(Number);return new Date(y,m-1,d);}
+function nightKey(now=new Date()){const x=new Date(now);if(x.getHours()<5)x.setDate(x.getDate()-1);return ymd(x);}
+function bedtimeFor(k){const [h,m]=state.settings.bedtime.split(":").map(Number);const d=parseKey(k);d.setHours(h,m,0,0);if(h<12)d.setDate(d.getDate()+1);return d;}
+function windDownFor(k){return new Date(bedtimeFor(k).getTime()-state.settings.lead*60000);}
+const fmtTime=d=>d.toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"});
+function fmtDur(ms){const m=Math.max(0,Math.round(ms/60000));const h=Math.floor(m/60),r=m%60;if(h&&r)return h+"h "+r+"m";if(h)return h+"h";return r+" min";}
+function night(k){return state.nights[k]||(state.nights[k]={done:{}});}
+const steps=()=>state.settings.steps;
+const lastStep=()=>steps()[steps().length-1];
+function outTime(k){const n=state.nights[k];if(!n)return null;return n.out!=null?n.out:(n.done[lastStep().id]||null);}
+function goalTime(k){const n=state.nights[k];return n&&n.goal!=null?n.goal:bedtimeFor(k).getTime();}
+function isOnTime(k){const t=outTime(k);return !!t&&t<=goalTime(k)+GRACE_MIN*60000;}
+function gemFor(n,id){if(n.gems&&n.gems[id])return n.gems[id];const st=steps().find(s=>s.id===id)||DEFAULT_STEPS.find(s=>s.id===id);return st?st.gem:"sapphire";}
+const labelOf=st=>(st.label||"").trim()||"Untitled step";
+function countDone(k){const n=state.nights[k];return n?steps().filter(s=>n.done[s.id]).length:0;}
+
+function streak(){
+  let k=nightKey(), d=parseKey(k), c=0;
+  if(!isOnTime(k)){ if(Date.now()<=bedtimeFor(k).getTime()+GRACE_MIN*60000){d.setDate(d.getDate()-1);} else return 0; }
+  while(isOnTime(ymd(d))){c++;d.setDate(d.getDate()-1);}
+  return c;
+}
+function bestStreak(){
+  const keys=Object.keys(state.nights).filter(isOnTime).sort();let best=0,run=0,prev=null;
+  for(const k of keys){const d=parseKey(k);if(prev){const p=new Date(prev);p.setDate(p.getDate()+1);run=(ymd(p)===k)?run+1:1;}else run=1;best=Math.max(best,run);prev=d;}
+  return best;
+}
+function totalGems(){let t=0;for(const k in state.nights)t+=Object.keys(state.nights[k].done).length;return t;}
+function gemCounts(){const c={};GEM_ORDER.forEach(g=>c[g]=0);for(const k in state.nights){const n=state.nights[k];Object.keys(n.done).forEach(id=>{c[gemFor(n,id)]++;});}return c;}
+
+/* ---------- gem art ---------- */
+function gemSVG(gem,filled,extra=""){
+  if(!filled) return `<svg viewBox="0 0 40 40" aria-hidden="true" ${extra}><path d="M11 7h18l8 9-17 19L3 16z" fill="none" stroke="var(--line)" stroke-width="1.6" stroke-dasharray="3 3" stroke-linejoin="round"/></svg>`;
+  const c=`var(--${gem})`;
+  return `<svg viewBox="0 0 40 40" aria-hidden="true" ${extra}>
+  <path d="M11 7h18l8 9-17 19L3 16z" fill="${c}"/>
+  <path d="M11 7h18l8 9H3z" fill="#fff" opacity=".28"/>
+  <path d="M11 7l4 9 5-9 5 9 4-9" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="1" stroke-linejoin="round"/>
+  <path d="M3 16h34M15 16l5 19 5-19" fill="none" stroke="#000" stroke-opacity=".14" stroke-width="1" stroke-linejoin="round"/>
+  <path d="M20 35 25 16h12z" fill="#000" opacity=".12"/>
+  <path d="M13.5 9.5l2 3.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity=".9"/>
+  </svg>`;
+}
+function medalSVG(gem){
+  const c=`var(--${gem})`;
+  return `<svg viewBox="0 0 60 60" aria-hidden="true"><circle cx="30" cy="30" r="27" fill="none" stroke="${c}" stroke-width="2.2"/><circle cx="30" cy="30" r="22" fill="${c}" opacity=".16"/>
+  <g transform="translate(13 12) scale(.85)"><path d="M11 7h18l8 9-17 19L3 16z" fill="${c}"/><path d="M11 7h18l8 9H3z" fill="#fff" opacity=".28"/><path d="M11 7l4 9 5-9 5 9 4-9" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="1"/><path d="M3 16h34M15 16l5 19 5-19" fill="none" stroke="#000" stroke-opacity=".14" stroke-width="1"/></g></svg>`;
+}
+
+/* ---------- badges ---------- */
+const BADGES=[
+  {id:"first",  name:"First early night", desc:"Lights out on time once", gem:"sapphire", test:s=>s.onTime>=1},
+  {id:"full",   name:"Full set", desc:"Collect every gem in one night", gem:"amethyst", test:s=>s.full>=1},
+  {id:"s3",     name:"Three in a row", desc:"A 3-night streak", gem:"aquamarine", test:s=>s.best>=3},
+  {id:"ahead",  name:"Ahead of schedule", desc:"Lights out 30+ min early", gem:"citrine", test:s=>s.ahead>=1},
+  {id:"s7",     name:"A full week", desc:"A 7-night streak", gem:"rose", test:s=>s.best>=7},
+  {id:"g100",   name:"Treasure chest", desc:"Collect 100 gems", gem:"citrine", test:s=>s.gems>=100},
+  {id:"s14",    name:"Two weeks strong", desc:"A 14-night streak", gem:"sapphire", test:s=>s.best>=14},
+  {id:"n25",    name:"Twenty-five nights", desc:"25 on-time nights in total", gem:"aquamarine", test:s=>s.onTime>=25},
+  {id:"s30",    name:"A month of early nights", desc:"A 30-night streak", gem:"amethyst", test:s=>s.best>=30},
+  {id:"s100",   name:"Hundred nights", desc:"A 100-night streak", gem:"rose", test:s=>s.best>=100}
+];
+function summary(){
+  let onTime=0,full=0,ahead=0;
+  for(const k in state.nights){
+    if(isOnTime(k)){onTime++;if(outTime(k)<=goalTime(k)-30*60000)ahead++;}
+    if(state.nights[k].full||countDone(k)===steps().length)full++;
+  }
+  return {onTime,full,ahead,best:bestStreak(),gems:totalGems()};
+}
+function checkBadges(){
+  const s=summary(),fresh=[];
+  BADGES.forEach(b=>{if(!state.badges[b.id]&&b.test(s)){state.badges[b.id]=Date.now();fresh.push(b);}});
+  return fresh;
+}
+
+/* ---------- render ---------- */
+const $=id=>document.getElementById(id);
+function phase(){
+  const k=nightKey(),now=Date.now();
+  if(countDone(k)===steps().length)return "done";
+  if(now<windDownFor(k).getTime())return "before";
+  if(now<bedtimeFor(k).getTime())return "wind";
+  return "late";
+}
+function renderTonight(){
+  const k=nightKey(),n=night(k),now=new Date(),bt=bedtimeFor(k),wd=windDownFor(k),p=phase();
+  const done=countDone(k),total=steps().length;
+  $("when").textContent=parseKey(k).toLocaleDateString([], {weekday:"long",day:"numeric",month:"long"})+" · lights out by "+fmtTime(bt);
+  let h="",s="";
+  if(p==="before"){h="Wind-down in "+fmtDur(wd-now);s="Start at "+fmtTime(wd)+". Getting a gem early is welcome too.";}
+  else if(p==="wind"){h="Bedtime in "+fmtDur(bt-now);s=done?done+" of "+total+" gems. Just the next one.":"Time to start. Just the first one.";}
+  else if(p==="late"){h="Past bedtime";s="Finish up and collect the rest. Tomorrow is a fresh string.";}
+  else {h=isOnTime(k)?"Sleep well":"All gems in";s=isOnTime(k)?"Lights out on time. See you tomorrow.":"Every gem collected. Tomorrow, aim for lights out by "+fmtTime(bedtimeFor(nightKey(new Date(now.getTime()+86400000)))) +".";}
+  $("headline").textContent=h;$("subline").textContent=s;
+
+  $("string").innerHTML=steps().map(st=>`<div class="g ${n.done[st.id]?"got":""}" data-gem="${st.id}">${gemSVG(st.gem,!!n.done[st.id])}</div>`).join("");
+  $("s-streak").textContent=streak();$("s-best").textContent=bestStreak();$("s-gems").textContent=totalGems();
+
+  const nextIdx=steps().findIndex(st=>!n.done[st.id]);
+  $("steps").innerHTML=steps().map((st,i)=>{
+    const t=n.done[st.id];
+    return `<li><button class="step ${t?"done":""} ${i===nextIdx&&p!=="before"?"next":""}" data-step="${st.id}" aria-pressed="${!!t}">
+      ${gemSVG(st.gem,!!t)}<span class="t"><span class="l">${esc(labelOf(st))}</span><span class="h">${esc(st.hint||"")}</span></span>
+      <span class="tm">${t?fmtTime(new Date(t)):""}</span></button></li>`;
+  }).join("");
+
+  const b=$("banner");
+  if(p==="wind"&&!done) b.innerHTML=`<div class="banner">It’s wind-down time. First gem: ${esc(labelOf(steps()[0]).toLowerCase())}.</div>`;
+  else b.innerHTML="";
+}
+function renderCollection(){
+  const s=summary();$("c-ontime").textContent=s.onTime;$("c-full").textContent=s.full;
+  const outs=Object.keys(state.nights).map(k=>{const t=outTime(k);if(!t)return null;const d=new Date(t);let m=d.getHours()*60+d.getMinutes();if(m<12*60)m+=1440;return m;}).filter(x=>x!=null);
+  if(outs.length){const a=Math.round(outs.reduce((x,y)=>x+y,0)/outs.length)%1440;const d=new Date();d.setHours(Math.floor(a/60),a%60,0,0);$("c-avg").textContent=fmtTime(d);}else $("c-avg").textContent="–";
+  const gc=gemCounts();
+  $("purse").innerHTML=GEM_ORDER.filter(g=>gc[g]>0||steps().some(s=>s.gem===g)).map(g=>`<div title="${GEMS[g]}">${gemSVG(g,true)}<span>${gc[g]}</span></div>`).join("");
+  // 5 weeks ending this week (Mon-start)
+  const today=parseKey(nightKey());const end=new Date(today);end.setDate(end.getDate()+((7-((today.getDay()+6)%7))-1));
+  const start=new Date(end);start.setDate(start.getDate()-34);
+  let html="";
+  for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
+    const k=ymd(d),fut=d>today,n=state.nights[k];
+    const dots=n?Object.keys(n.done).sort((a,b)=>n.done[a]-n.done[b]).map(id=>`<i style="background:var(--${gemFor(n,id)})"></i>`).join(""):"";
+    html+=`<div class="cell ${fut?"future":""} ${isOnTime(k)?"ontime":""} ${k===ymd(today)?"today":""}" title="${d.toLocaleDateString()}"><span class="d">${d.getDate()}</span><div class="dots">${dots}</div></div>`;
+  }
+  $("cal").innerHTML=html;
+}
+function renderBadges(){
+  const got=BADGES.filter(b=>state.badges[b.id]).length;
+  $("b-lede").textContent=got?`${got} of ${BADGES.length} earned. Keep the string going.`:"Your first one is a single early night away.";
+  $("badges").innerHTML=BADGES.map(b=>`<div class="badge ${state.badges[b.id]?"":"locked"}">${medalSVG(b.gem)}<b>${b.name}</b><span>${b.desc}</span></div>`).join("");
+}
+function renderSettings(){
+  $("bedtime").value=state.settings.bedtime;$("lead").value=String(state.settings.lead);
+  renderStepEdits();
+  const wd=fmtTime(windDownFor(nightKey()));
+  document.querySelectorAll(".wd-time").forEach(e=>e.textContent=wd);
+  const ra=$("r-actions");
+  if(IN_CLAUDE){
+    $("r-intro").textContent="Web apps can’t set iPhone alarms, so use one of the routes below. The installable version of this app can also add a repeating calendar alert in one tap.";
+    ra.innerHTML="";
+  }else{
+    $("r-intro").textContent="Web apps can’t set iPhone alarms. The most reliable reminder is a repeating calendar alert at your wind-down time; this app also notifies you if it’s open.";
+    let h=`<button class="btn primary" id="ics">Add nightly reminder to Calendar</button>`;
+    if("Notification" in window && Notification.permission!=="granted") h+=`<button class="btn" id="notif">Allow notifications</button>`;
+    ra.innerHTML=h;
+    $("ics").onclick=downloadICS;
+    if($("notif"))$("notif").onclick=async()=>{const r=await Notification.requestPermission();toast(r==="granted"?"Notifications on":"Notifications stay off");renderSettings();};
+  }
+}
+const ICON={
+  up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg>',
+  down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>',
+  del:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>'};
+function renderStepEdits(){
+  const L=steps().length;
+  $("stepedits").innerHTML=steps().map((st,i)=>`<div class="stepedit" data-id="${st.id}">
+    <button class="gempick" data-act="gem" aria-label="Change gem colour, now ${GEMS[st.gem]}">${gemSVG(st.gem,true)}</button>
+    <div class="fields"><input data-f="label" value="${esc(st.label)}" placeholder="Step name" maxlength="40" aria-label="Step name">
+    <input class="desc" data-f="hint" value="${esc(st.hint||"")}" placeholder="Description (optional)" maxlength="80" aria-label="Step description"></div>
+    <div class="tools"><button data-act="up" ${i===0?"disabled":""} aria-label="Move up">${ICON.up}</button><button data-act="down" ${i===L-1?"disabled":""} aria-label="Move down">${ICON.down}</button><button data-act="del" ${L<=1?"disabled":""} aria-label="Delete step">${ICON.del}</button></div>
+  </div>`).join("");
+  const add=$("addstep");add.disabled=L>=MAX_STEPS;add.textContent=L>=MAX_STEPS?"Up to "+MAX_STEPS+" steps":"Add a step";
+}
+function renderAll(){renderTonight();renderCollection();renderBadges();renderSettings();}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+
+/* ---------- interactions ---------- */
+$("steps").addEventListener("click",e=>{
+  const btn=e.target.closest("[data-step]");if(!btn)return;
+  const id=btn.dataset.step,k=nightKey(),n=night(k),st=steps().find(s=>s.id===id);
+  if(n.done[id]){delete n.done[id];if(n.gems)delete n.gems[id];if(id===lastStep().id){delete n.out;delete n.goal;}delete n.full;save();renderAll();toast("Gem put back");return;}
+  n.done[id]=Date.now();(n.gems||(n.gems={}))[id]=st.gem;
+  if(id===lastStep().id){n.out=n.done[id];n.goal=bedtimeFor(k).getTime();}
+  if(countDone(k)===steps().length)n.full=true;
+  save();
+  const gemEl=document.querySelector(`[data-gem="${id}"]`);
+  renderTonight();
+  const target=document.querySelector(`[data-gem="${id}"]`)||gemEl;
+  const r=(target||btn).getBoundingClientRect();
+  burst(r.left+r.width/2,r.top+r.height/2,[cssVar(st.gem),cssVar(st.gem),"#ffffff"],38);
+  const all=countDone(k)===steps().length;
+  const fresh=checkBadges();save();renderAll();
+  if(all) setTimeout(()=>celebrate(k,fresh),450);
+  else { toast(CHEERS[Math.floor(Math.random()*CHEERS.length)]+" "+GEMS[st.gem]+" collected."); if(fresh.length)setTimeout(()=>showBadge(fresh),700); }
+});
+function celebrate(k,fresh){
+  const on=isOnTime(k),sk=streak();
+  const cols=steps().map(s=>cssVar(s.gem));
+  bigConfetti(cols);
+  $("card").innerHTML=`<div class="gems">${steps().map(s=>gemSVG(s.gem,true)).join("")}</div>
+   <h4>${on?(sk>1?sk+" early nights in a row":"Early night, done"):"Full set"}</h4>
+   <p>${on?"Lights out on time. Your future self says thanks.":"Every gem collected. Aim for lights out by "+state.settings.bedtime+" next time to grow your streak."}</p>
+   <button class="btn primary" id="gn">Good night</button>`;
+  $("toast").classList.remove("on");$("overlay").hidden=false;$("gn").focus();
+  $("gn").onclick=()=>{$("overlay").hidden=true;if(fresh.length)showBadge(fresh);};
+}
+function showBadge(list){
+  const b=list[0];
+  $("card").innerHTML=`<div class="medal">${medalSVG(b.gem)}</div><h4>${b.name}</h4><p>New badge: ${b.desc.toLowerCase()}.</p><button class="btn primary" id="bk">Keep it</button>`;
+  $("overlay").hidden=false;burst(innerWidth/2,innerHeight/2-60,[cssVar(b.gem),"#ffffff"],60);
+  $("bk").focus();$("bk").onclick=()=>{$("overlay").hidden=true;if(list.length>1)showBadge(list.slice(1));};
+}
+$("nav").addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b)return;
+  document.querySelectorAll("#nav button").forEach(x=>x.removeAttribute("aria-current"));b.setAttribute("aria-current","page");
+  document.querySelectorAll(".view").forEach(v=>v.hidden=v.id!=="v-"+b.dataset.v);
+  renderAll();window.scrollTo(0,0);
+});
+$("bedtime").addEventListener("change",e=>{if(e.target.value){state.settings.bedtime=e.target.value;save();renderAll();toast("Bedtime set to "+e.target.value);}});
+$("lead").addEventListener("change",e=>{state.settings.lead=Number(e.target.value);save();renderAll();toast("Wind-down reminder updated");});
+$("stepedits").addEventListener("input",e=>{
+  const f=e.target.dataset.f,row=e.target.closest(".stepedit");if(!f||!row)return;
+  const st=steps().find(s=>s.id===row.dataset.id);if(!st)return;
+  st[f]=e.target.value;save();renderTonight();
+});
+$("stepedits").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-act]");if(!b||b.disabled)return;
+  const row=b.closest(".stepedit"),list=steps(),i=list.findIndex(s=>s.id===row.dataset.id);if(i<0)return;
+  const act=b.dataset.act;
+  if(act==="gem"){list[i].gem=GEM_ORDER[(GEM_ORDER.indexOf(list[i].gem)+1)%GEM_ORDER.length];}
+  else if(act==="up"&&i>0){[list[i-1],list[i]]=[list[i],list[i-1]];}
+  else if(act==="down"&&i<list.length-1){[list[i+1],list[i]]=[list[i],list[i+1]];}
+  else if(act==="del"&&list.length>1){
+    const [gone]=list.splice(i,1);save();renderAll();
+    toast("Deleted “"+labelOf(gone)+"”",{label:"Undo",fn:()=>{if(steps().length<MAX_STEPS){steps().splice(i,0,gone);save();renderAll();toast("Step restored");}}});
+    return;
+  }
+  save();renderStepEdits();renderTonight();
+  const again=document.querySelector(`.stepedit[data-id="${row.dataset.id}"] [data-act="${act}"]`);if(again&&!again.disabled)again.focus();
+});
+$("addstep").addEventListener("click",()=>{
+  const list=steps();if(list.length>=MAX_STEPS)return;
+  const used=list.map(s=>s.gem),gem=GEM_ORDER.find(g=>!used.includes(g))||GEM_ORDER[list.length%GEM_ORDER.length];
+  const st={id:"s"+Date.now().toString(36),label:"",hint:"",gem};
+  list.splice(Math.max(0,list.length-1),0,st);save();renderAll();
+  const inp=document.querySelector(`.stepedit[data-id="${st.id}"] [data-f="label"]`);if(inp)inp.focus();
+});
+let resetArmed=null;
+$("reset").addEventListener("click",e=>{
+  const b=e.currentTarget;
+  if(!resetArmed){b.textContent="Tap again to erase nights, streaks and badges";resetArmed=setTimeout(()=>{resetArmed=null;b.textContent="Reset all progress";},4000);return;}
+  clearTimeout(resetArmed);resetArmed=null;b.textContent="Reset all progress";
+  const keep=state.settings;state=fresh();state.settings=keep;save();renderAll();toast("Progress reset");
+});
+
+/* ---------- reminders ---------- */
+function downloadICS(){
+  const k=nightKey(),wd=windDownFor(k);
+  const f=d=>d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+"T"+pad(d.getHours())+pad(d.getMinutes())+"00";
+  const now=new Date();
+  const ics=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Early Night//EN","BEGIN:VEVENT",
+    "UID:early-night-"+now.getTime()+"@earlynight","DTSTAMP:"+f(now),"DTSTART:"+f(wd),"DURATION:PT"+state.settings.lead+"M","RRULE:FREQ=DAILY",
+    "SUMMARY:Wind down – lights out by "+state.settings.bedtime,"DESCRIPTION:Open Early Night and collect your first gem.",
+    "BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:Time to wind down","TRIGGER:PT0M","END:VALARM","END:VEVENT","END:VCALENDAR"].join("\r\n");
+  const url=URL.createObjectURL(new Blob([ics],{type:"text/calendar"}));
+  const a=document.createElement("a");a.href=url;a.download="early-night-reminder.ics";document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),4000);
+  toast("Open the file to add it to Calendar");
+}
+async function maybeNotify(){
+  const k=nightKey();
+  if(phase()!=="wind"||state.notified[k]||countDone(k))return;
+  state.notified[k]=1;save();renderTonight();
+  if(!IN_CLAUDE&&"Notification" in window&&Notification.permission==="granted"){
+    const body="Lights out by "+state.settings.bedtime+". First gem: "+labelOf(steps()[0])+".";
+    try{const reg=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration();if(reg)reg.showNotification("Time to wind down",{body,icon:"icon-192.png",tag:"wind-"+k});else new Notification("Time to wind down",{body});}catch(e){}
+  }
+}
+
+/* ---------- effects ---------- */
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const cv=$("fx"),cx=cv.getContext("2d");let parts=[],raf=null;
+function size(){const r=devicePixelRatio||1;cv.width=innerWidth*r;cv.height=innerHeight*r;cx.setTransform(r,0,0,r,0,0);}
+size();addEventListener("resize",size);
+function cssVar(g){return getComputedStyle(document.documentElement).getPropertyValue("--"+g).trim()||"#888";}
+function burst(x,y,colors,n){
+  if(reduce)return;
+  for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,v=2+Math.random()*5;
+    parts.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-3,s:4+Math.random()*5,r:Math.random()*6,vr:(Math.random()-.5)*.3,c:colors[i%colors.length],life:60+Math.random()*30});}
+  if(!raf)raf=requestAnimationFrame(tick);
+}
+function bigConfetti(colors){
+  if(reduce)return;
+  for(let i=0;i<140;i++){parts.push({x:Math.random()*innerWidth,y:-20-Math.random()*innerHeight*.5,vx:(Math.random()-.5)*2,vy:2+Math.random()*3,s:5+Math.random()*6,r:Math.random()*6,vr:(Math.random()-.5)*.2,c:colors[i%colors.length],life:160+Math.random()*60});}
+  if(!raf)raf=requestAnimationFrame(tick);
+}
+function tick(){
+  cx.clearRect(0,0,innerWidth,innerHeight);
+  parts=parts.filter(p=>p.life>0&&p.y<innerHeight+30);
+  for(const p of parts){p.vy+=.12;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;p.life--;
+    cx.save();cx.globalAlpha=Math.min(1,p.life/30);cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;
+    cx.beginPath();cx.moveTo(0,-p.s);cx.lineTo(p.s*.7,0);cx.lineTo(0,p.s);cx.lineTo(-p.s*.7,0);cx.closePath();cx.fill();cx.restore();}
+  raf=parts.length?requestAnimationFrame(tick):(cx.clearRect(0,0,innerWidth,innerHeight),null);
+}
+let tt;function toast(m,action){
+  const t=$("toast");t.textContent=m;t.classList.toggle("act",!!action);
+  if(action){const b=document.createElement("button");b.textContent=action.label;b.onclick=()=>{t.classList.remove("on","act");clearTimeout(tt);action.fn();};t.appendChild(b);}
+  t.classList.add("on");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("on","act"),action?5000:2200);
+}
+
+/* ---------- boot ---------- */
+const local=loadLocal();if(local)state=local;
+renderAll();
+setInterval(()=>{renderTonight();maybeNotify();},30000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden){renderAll();maybeNotify();}});
+maybeNotify();
+connectDb();
+if("serviceWorker" in navigator && location.protocol!=="file:"){navigator.serviceWorker.register("sw.js").catch(()=>{});}
+})();
+</script>
+</body>
+</html>
