@@ -1,8 +1,9 @@
 # Early Night – install on iPhone
 
-1. Open the URL https://xxxiuxiuz.github.io/early-night/ in **Safari** on your iPhone.
-2. Tap Share › **Add to Home Screen**. Open it from the Home Screen icon.
-3. In Settings inside the app: tap **Add nightly reminder to Calendar** (a repeating alert at wind-down time), and optionally set up the Shortcuts automation described there.
+1. Host this folder on any HTTPS static host (GitHub Pages, Netlify Drop, Vercel). Drag-and-drop the folder on https://app.netlify.com/drop is the fastest.
+2. Open the URL in **Safari** on your iPhone.
+3. Tap Share › **Add to Home Screen**. Open it from the Home Screen icon.
+4. In Settings inside the app: tap **Add nightly reminder to Calendar** (a repeating alert at wind-down time), and optionally set up the Shortcuts automation described there.
 
 Progress is stored on the device (localStorage).
 

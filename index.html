@@ -9,9 +9,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Early Night">
 <meta name="theme-color" content="#161834">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="icon" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest?v=2">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
+<link rel="icon" href="icon-192.png?v=2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -41,12 +41,13 @@
   --mon:#76DDC3; --belly:#DFFBF4; --monline:#1C2F36; color-scheme: dark;
 }
 *,*::before,*::after{box-sizing:inherit}
-html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html,body{overflow-x:hidden;max-width:100%}
 body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:"Lexend",system-ui,-apple-system,"Segoe UI",sans-serif;font-weight:300;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
 button,input,select{font:inherit;color:inherit}
 button{cursor:pointer}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:10px}
-.app{max-width:440px;margin:0 auto;padding:22px 20px 120px}
+.app{max-width:440px;margin:0 auto;padding:22px 20px 120px;overflow-x:hidden;overflow-x:clip}
 .view[hidden]{display:none}
 h2{font-size:26px;font-weight:500;letter-spacing:-0.01em;margin:0 0 4px}
 .when{font-size:14px;color:var(--muted);margin:0 0 2px}
@@ -64,7 +65,7 @@ h2{font-size:26px;font-weight:500;letter-spacing:-0.01em;margin:0 0 4px}
 .bubble small{display:block;font-size:12px;color:var(--muted);margin-top:5px;letter-spacing:.5px}
 
 /* Ring */
-.ringwrap{position:relative;width:min(90vw,350px);aspect-ratio:1;margin:4px auto 22px}
+.ringwrap{position:relative;width:min(100%,350px);aspect-ratio:1;margin:4px auto 22px}
 .ringwrap svg.ring{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .ringwrap.complete svg.ring{filter:drop-shadow(0 0 10px color-mix(in srgb,var(--gold) 60%,transparent))}
 .node{position:absolute;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;padding:0;border:2px dashed var(--line);background:var(--bg);font-size:clamp(20px,7vw,28px);line-height:1;transition:transform .3s cubic-bezier(.3,1.6,.5,1),background .2s}
@@ -75,12 +76,12 @@ h2{font-size:26px;font-weight:500;letter-spacing:-0.01em;margin:0 0 4px}
 .node.pop{transform:scale(1.18)}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 40%,transparent)}50%{box-shadow:0 0 0 8px transparent}}
 .center{position:absolute;inset:30%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;pointer-events:none}
-.center .big{font-size:clamp(22px,7.4vw,32px);font-weight:500;letter-spacing:-0.02em;line-height:1.05}
+.center .big{white-space:nowrap;font-size:clamp(20px,6.6vw,30px);font-weight:500;letter-spacing:-0.02em;line-height:1.05}
 .center .lbl{font-size:13px;color:var(--muted);margin-top:4px}
 .center svg{width:52%;height:auto;filter:drop-shadow(0 4px 4px rgba(0,0,0,.25))}
-.nlabel{position:absolute;transform:translateX(-50%);font-size:clamp(10.5px,3vw,12.5px);line-height:1.2;text-align:center;color:var(--muted);background:color-mix(in srgb,var(--bg) 85%,transparent);padding:2px 6px;border-radius:8px;pointer-events:none;width:max-content;max-width:var(--lw);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.nlabel{position:absolute;transform:translateX(-50%);font-size:clamp(10.5px,3vw,12.5px);line-height:1.2;text-align:center;color:var(--muted);text-shadow:0 0 3px var(--bg),0 0 3px var(--bg),0 0 6px var(--bg);pointer-events:none;width:var(--lw);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .nlabel.done{color:var(--ink)}
-.nlabel.sm{font-size:clamp(9.5px,2.7vw,11.5px);padding:1px 4px}
+.nlabel.sm{font-size:clamp(9.5px,2.7vw,11.5px)}
 .nlabel.next{color:var(--accent);font-weight:500}
 .nextline{text-align:center;margin:4px 0 0;min-height:54px}
 .nextline b{display:block;font-weight:500;font-size:18px}
@@ -93,12 +94,12 @@ h2{font-size:26px;font-weight:500;letter-spacing:-0.01em;margin:0 0 4px}
 .banner{margin:0 0 6px;padding:12px 14px;border-radius:14px;background:var(--soft);font-size:14.5px;line-height:1.4}
 
 /* Collection list */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:4px 0 18px}
-.stat{background:var(--surface);border-radius:14px;padding:10px 8px;border:1px solid var(--line);text-align:center}
-.stat b{display:block;font-size:19px;font-weight:500;white-space:nowrap}
-.stat span{font-size:11.5px;color:var(--muted);line-height:1.2;display:block;margin-top:2px}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:4px 0 18px}
+.stat{background:var(--surface);border-radius:14px;padding:10px 12px;border:1px solid var(--line);display:flex;align-items:center;gap:10px;min-width:0}
+.stat b{display:block;font-size:20px;font-weight:500;white-space:nowrap;flex:none}
+.stat span{font-size:12.5px;color:var(--muted);line-height:1.25;display:block;min-width:0}
 .rows{list-style:none;margin:0;padding:0}
-.row{display:grid;grid-template-columns:58px 1fr auto;align-items:center;gap:10px;padding:12px 4px;border-bottom:1px solid var(--line)}
+.row{display:grid;grid-template-columns:58px minmax(0,1fr) auto;align-items:center;gap:10px;padding:12px 4px;border-bottom:1px solid var(--line)}
 .row .dt span{display:block;font-size:12px;color:var(--muted)}
 .row .dt b{display:block;font-size:17px;font-weight:500}
 .row .ic{display:flex;flex-wrap:wrap;gap:3px;font-size:20px;line-height:1.2;align-items:center}
@@ -132,6 +133,17 @@ h2{font-size:26px;font-weight:500;letter-spacing:-0.01em;margin:0 0 4px}
 .field{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
 .field label{font-size:16px}
 .field small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+.switch{appearance:none;-webkit-appearance:none;width:50px;height:30px;border-radius:15px;background:var(--line);position:relative;flex:none;cursor:pointer;transition:background .2s;margin:0}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .2s}
+.switch:checked{background:var(--c6)}
+.switch:checked::after{transform:translateX(20px)}
+.node.locked{opacity:.5}
+.node.locked::after{content:"🔒";position:absolute;right:-5px;bottom:-5px;font-size:12px}
+.seq{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted);padding:3px 2px 0;cursor:pointer}
+.fields .seq input{width:20px;height:20px;min-width:20px;margin:0;padding:0;border:0;accent-color:var(--accent);flex:none}
+.seq.off{opacity:.45;cursor:default}
+.node.nope{animation:nope .4s}
+@keyframes nope{0%,100%{translate:0}25%{translate:-5px}75%{translate:5px}}
 .field input[type=text]{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 10px;font-size:16px;width:140px}
 .field input[type=time],.field select{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 10px;font-size:16px;min-width:110px}
 h3{font-size:18px;font-weight:500;margin:28px 0 4px}
@@ -234,7 +246,7 @@ canvas#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-in
       <select id="lead"><option value="15">15 min before</option><option value="30">30 min before</option><option value="45">45 min before</option><option value="60">1 hour before</option><option value="90">1½ hours before</option><option value="120">2 hours before</option></select></div>
     <div class="field"><div><label for="monname">Your buddy’s name</label><small>The little monster cheering you on</small></div><input type="text" id="monname" maxlength="16" placeholder="Mochi" autocomplete="off"></div>
     <h3>Your steps</h3>
-    <p class="note">These are the pieces of your circle, in clockwise order. Tap an emoji to change it. The last step decides whether the night counts as early, so new steps go just before it.</p>
+    <p class="note">These are the pieces of your circle, clockwise. Tap an emoji to change it. Tick “In order” on a step to lock it until every step above it is done; an arrow on the ring shows that direction. The last step decides whether the night counts as early.</p>
     <div id="stepedits"></div>
     <button class="btn" id="addstep">Add a step</button>
 
@@ -251,7 +263,7 @@ canvas#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-in
 
     <h3>Data</h3>
     <p class="note" id="d-note">Progress is saved on this device.</p>
-    <button class="btn danger" id="reset">Reset all progress</button>
+    <button class="btn" id="resettoday">Reset today</button><button class="btn danger" id="reset">Reset all progress</button>
   </section>
 </main>
 
@@ -313,7 +325,7 @@ async function connectDb(){
     const [db,user]=await Promise.all([window.claude.use("db"),window.claude.use("user")]);
     if(!db||!user)return;const id=await user.id();if(!id)return;
     const ref=db.collection("data/users/"+id).doc("early-night");const snap=await ref.get();
-    if(snap.exists){const remote=migrate(snap.data());if(remote&&(remote.updatedAt||0)>(state.updatedAt||0)){state=remote;if(!state.seen)state.seen=badgeCounts();saveLocal();renderAll();}}
+    if(snap.exists){const remote=migrate(snap.data());if(remote&&(remote.updatedAt||0)>(state.updatedAt||0)){state=normalizeSeq(remote);if(!state.seen)state.seen=badgeCounts();saveLocal();renderAll();}}
     dbRef=ref;ref.set(JSON.parse(JSON.stringify(state))).catch(()=>{});
     $("d-note").textContent="Progress is saved to your Claude account.";
   }catch(e){}
@@ -518,6 +530,7 @@ const $=id=>document.getElementById(id);
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
 function phase(){const k=nightKey(),now=Date.now();if(countDone(k)===steps().length)return "done";if(now<windDownFor(k).getTime())return "before";if(now<bedtimeFor(k).getTime())return "wind";return "late";}
 let currentView="tonight";
+function available(i,n){const list=steps();return i===0||!list[i].seq||list.slice(0,i).every(x=>n.done[x.id]);}
 function canUndo(){const u=state.undo;return !!(u&&u.k===nightKey()&&state.nights[u.k]&&state.nights[u.k].done[u.id]);}
 
 function renderTonight(hop){
@@ -535,10 +548,16 @@ function renderTonight(hop){
     const per=360/L,a0=-90+(i-.5)*per+1.2,a1=-90+(i+.5)*per-1.2,[x0,y0]=toXY(a0),[x1,y1]=toXY(a1);
     arcs+=`<path d="M${x0.toFixed(2)} ${y0.toFixed(2)} A${R} ${R} 0 ${a1-a0>180?1:0} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}" fill="none" stroke="${stroke}" stroke-width="${sw}" stroke-linecap="round"/>`;
   });
-  const nextIdx=list.findIndex(st=>!n.done[st.id]),size=L<=5?17:L<=6?15.5:14,lw=L<=4?32:L<=5?30:L<=6?28:27;
+  list.forEach((st,i)=>{
+    if(!st.seq||i===0||L<2)return;
+    const per=360/L,am=-90+(i-.5)*per,[ax,ay]=toXY(am),ready=list.slice(0,i).every(x=>n.done[x.id]);
+    arcs+=`<g transform="translate(${ax.toFixed(2)} ${ay.toFixed(2)}) rotate(${(am+90).toFixed(1)})"><circle r="4.3" fill="var(--bg)" stroke="${ready?"var(--accent)":"var(--line)"}" stroke-width=".7"/><path d="M-1.3 -2.2 L1.5 0 L-1.3 2.2" fill="none" stroke="${ready?"var(--accent)":"var(--muted)"}" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+  });
+  const nextIdx=list.findIndex((st,i)=>!n.done[st.id]&&available(i,n)),size=L<=5?17:L<=6?15.5:14,lw=L<=4?32:L<=5?30:L<=6?28:27;
   const nodes=list.map((st,i)=>{
     const per=360/L,a=-90+(L===1?0:i*per),[x,y]=toXY(a),on=!!n.done[st.id];
-    return `<button class="node ${on?"done":""} ${i===nextIdx&&p!=="before"?"next":""}" data-step="${st.id}" style="--col:var(--c${i%8+1});width:${size}%;left:${(x-size/2).toFixed(2)}%;top:${(y-size/2).toFixed(2)}%" aria-label="${esc(labelOf(st))}${on?", done":""}" aria-pressed="${on}"><span class="e">${esc(st.icon||"⭐")}</span></button><div class="nlabel ${L>=7?"sm":""} ${on?"done":""} ${i===nextIdx&&p!=="before"?"next":""}" style="--lw:${lw}%;left:${x.toFixed(2)}%;top:${(y+size/2+.8).toFixed(2)}%">${esc(labelOf(st))}</div>`;
+    const locked=!on&&!available(i,n);
+    return `<button class="node ${on?"done":""} ${locked?"locked":""} ${i===nextIdx&&p!=="before"?"next":""}" data-step="${st.id}" style="--col:var(--c${i%8+1});width:${size}%;left:${(x-size/2).toFixed(2)}%;top:${(y-size/2).toFixed(2)}%" aria-label="${esc(labelOf(st))}${on?", done":locked?", locked":""}" aria-pressed="${on}"><span class="e">${esc(st.icon||"⭐")}</span></button><div class="nlabel ${L>=7?"sm":""} ${on?"done":""} ${i===nextIdx&&p!=="before"?"next":""}" style="--lw:${lw}%;left:${Math.min(100-lw/2,Math.max(lw/2,x)).toFixed(2)}%;top:${(y+size/2+.8).toFixed(2)}%">${esc(labelOf(st))}</div>`;
   }).join("");
   let center="";
   if(p==="done")center=`${starSVG(isOnTime(k))}<span class="lbl">${isOnTime(k)?"Gold star tonight":"Star collected"}</span>`;
@@ -549,6 +568,7 @@ function renderTonight(hop){
   $("ring").innerHTML=`<svg class="ring" viewBox="0 0 100 100">${arcs}</svg>${nodes}<div class="center" id="ringcenter">${center}</div>`;
 
   if(p==="done")$("nextline").innerHTML=`<b>Circle complete</b><span>${isOnTime(k)?"Lights out on time. Sleep well.":"Every piece done. Aim for lights out by "+state.settings.bedtime+" tomorrow."}</span>`;
+  else if(nextIdx<0)$("nextline").innerHTML="";
   else{const st=list[nextIdx];$("nextline").innerHTML=`<b>Next: ${esc(st.icon)} ${esc(labelOf(st))}</b><span>${esc(st.hint||"Tap it on the circle when you’re done.")}</span>`;}
 
   const u=$("undo");
@@ -627,7 +647,8 @@ function renderStepEdits(){
   $("stepedits").innerHTML=steps().map((st,i)=>`<div class="stepedit" data-id="${st.id}">
     <button class="emojipick" data-act="emoji" aria-label="Change icon, now ${esc(st.icon)}">${esc(st.icon||"⭐")}</button>
     <div class="fields"><input data-f="label" value="${esc(st.label)}" placeholder="Step name" maxlength="40" aria-label="Step name">
-    <input class="desc" data-f="hint" value="${esc(st.hint||"")}" placeholder="Description (optional)" maxlength="80" aria-label="Step description"></div>
+    <input class="desc" data-f="hint" value="${esc(st.hint||"")}" placeholder="Description (optional)" maxlength="80" aria-label="Step description">
+    <label class="seq ${i===0?"off":""}"><input type="checkbox" data-f="seq" ${st.seq&&i>0?"checked":""} ${i===0?"disabled":""}>${i===0?"First step, starts the circle":"In order, after the steps above"}</label></div>
     <div class="tools"><button data-act="up" ${i===0?"disabled":""} aria-label="Move up">${ICON.up}</button><button data-act="down" ${i===L-1?"disabled":""} aria-label="Move down">${ICON.down}</button><button data-act="del" ${L<=1?"disabled":""} aria-label="Delete step">${ICON.del}</button></div></div>`).join("");
   const add=$("addstep");add.disabled=L>=MAX_STEPS;add.textContent=L>=MAX_STEPS?"Up to "+MAX_STEPS+" steps":"Add a step";
 }
@@ -642,6 +663,12 @@ $("ring").addEventListener("click",e=>{
     else toast("Done at "+fmtTime(new Date(n.done[id]))+". Only the last piece can be undone.");
     return;
   }
+  const idx=steps().indexOf(st);
+  if(!available(idx,n)){
+    const need=steps().slice(0,idx).find(x=>!n.done[x.id]);
+    btn.classList.remove("nope");void btn.offsetWidth;btn.classList.add("nope");
+    toast("In order: first "+need.icon+" "+labelOf(need));
+    cheer("One at a time! “"+labelOf(need)+"” comes first.");renderMonster("tonight",true);return;}
   const before=state.seen||badgeCounts();
   state.undo={k,id,snap:JSON.parse(JSON.stringify(state.nights[k]||{done:{},icons:{}}))};
   n.done[id]=Date.now();n.icons=n.icons||{};n.icons[id]=st.icon;n.total=steps().length;
@@ -829,7 +856,14 @@ function openEmojiSheet(stepId){
 }
 
 /* ---------- settings interactions ---------- */
-$("stepedits").addEventListener("input",e=>{const f=e.target.dataset.f,row=e.target.closest(".stepedit");if(!f||!row)return;const st=steps().find(s=>s.id===row.dataset.id);if(!st)return;st[f]=e.target.value;save();renderTonight();});
+function onStepField(e){
+  const f=e.target.dataset.f,row=e.target.closest(".stepedit");if(!f||!row)return;const st=steps().find(s=>s.id===row.dataset.id);if(!st)return;
+  if(e.target.type==="checkbox"){if(e.type!=="change")return;st.seq=e.target.checked;toast(st.seq?"“"+labelOf(st)+"” now waits for the steps above":"“"+labelOf(st)+"” can be done any time");}
+  else st[f]=e.target.value;
+  save();renderTonight();
+}
+$("stepedits").addEventListener("input",onStepField);
+$("stepedits").addEventListener("change",onStepField);
 $("stepedits").addEventListener("click",e=>{
   const b=e.target.closest("button[data-act]");if(!b||b.disabled)return;
   const row=b.closest(".stepedit"),list=steps(),i=list.findIndex(s=>s.id===row.dataset.id);if(i<0)return;
@@ -852,6 +886,17 @@ $("monname").addEventListener("input",e=>{state.settings.monName=e.target.value.
 $("monname").addEventListener("change",()=>{cheer("I love my name! Thank you!");renderMonster("settings",true);});
 $("bedtime").addEventListener("change",e=>{if(e.target.value){state.settings.bedtime=e.target.value;save();renderAll();toast("Bedtime set to "+e.target.value);}});
 $("lead").addEventListener("change",e=>{state.settings.lead=Number(e.target.value);save();renderAll();toast("Wind-down reminder updated");});
+let todayArmed=null;
+$("resettoday").addEventListener("click",e=>{
+  const b=e.currentTarget,k=nightKey();
+  if(!state.nights[k]||!Object.keys(state.nights[k].done||{}).length){toast("Nothing to reset tonight yet");return;}
+  if(!todayArmed){b.textContent="Tap again to clear tonight";todayArmed=setTimeout(()=>{todayArmed=null;b.textContent="Reset today";},4000);return;}
+  clearTimeout(todayArmed);todayArmed=null;b.textContent="Reset today";
+  const hadStar=!!state.nights[k].full;
+  delete state.nights[k];state.undo=null;state.seen=badgeCounts();
+  if(hadStar)unseenStars=Math.max(0,unseenStars-1);updateJarDot();jar.count=-1;
+  save();cheer("Fresh start for tonight!");renderAll();toast("Tonight cleared"+(hadStar?" · star returned":""));
+});
 let resetArmed=null;
 $("reset").addEventListener("click",e=>{
   const b=e.currentTarget;
@@ -909,7 +954,8 @@ let tt;function toast(m,action){
 }
 
 /* ---------- boot ---------- */
-const local=loadLocal();if(local)state=local;
+function normalizeSeq(st){if(st&&st.settings&&st.settings.sequential){st.settings.steps.forEach((x,i)=>{if(i>0)x.seq=true;});}if(st&&st.settings)delete st.settings.sequential;return st;}
+const local=loadLocal();if(local)state=normalizeSeq(local);
 if(!state.seen)state.seen=badgeCounts();
 renderAll();
 setInterval(()=>{if(currentView==="tonight")renderTonight();maybeNotify();},30000);
